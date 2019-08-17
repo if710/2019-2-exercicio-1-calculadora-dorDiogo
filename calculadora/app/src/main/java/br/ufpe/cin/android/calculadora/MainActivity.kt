@@ -1,13 +1,62 @@
 package br.ufpe.cin.android.calculadora
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+    var expression: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        createEqualButtonListener()
+        createClearButtonListener()
+        createButtonsListeners()
+    }
+
+    // Avalia a expressão. Se expressão válida, mostra a resposta no campo text_info.
+    fun createEqualButtonListener() {
+        btn_Equal.setOnClickListener {
+            try {
+                val answer = eval(expression)
+                text_info.text = answer.toString()
+                resetExpression()
+            } catch (e: RuntimeException) {
+                Toast.makeText(
+                    this,
+                    e.toString(),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+            resetExpression()
+        }
+    }
+
+    fun createClearButtonListener() {
+        btn_Clear.setOnClickListener { resetExpression() }
+    }
+
+    // Pra cada botão, cria um listener que vai adicionar o respectivo caracter à expressão e atualizar o visor da
+    // expressão. Exceto para o botão '=' e 'C'.
+    fun createButtonsListeners() {
+        arrayOf(
+            btn_0, btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9, btn_Add, btn_Divide, btn_Dot,
+            btn_LParen, btn_Multiply, btn_Power, btn_RParen, btn_Subtract
+        )
+            .map { buttonListener ->
+                buttonListener.setOnClickListener {
+                    expression += buttonListener.text
+                    text_calc.setText(expression)
+                }
+            }
+    }
+
+    fun resetExpression() {
+        expression = ""
+        text_calc.setText(expression)
     }
 
 
