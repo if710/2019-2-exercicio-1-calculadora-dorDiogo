@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
+        // Possivelmente restaura estado da activity.
         text_calc.setText(savedInstanceState?.getString(EXPRESSION_STATE, ""))
         text_info.text = savedInstanceState?.getString(RESULT_STATE, "")
 
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         btn_Clear.setOnClickListener { resetExpression() }
     }
 
-    // Cria um listener pros botões que constroem uma expressão. Vai adicionar o
+    // Cria um listener pros botões que constroem uma expressão. Adiciona o
     // respectivo caracter ao campo da expressão.
     fun createExpressionButtonsListeners() {
         arrayOf(
