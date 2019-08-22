@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Possivelmente restaura estado da activity.
+        // Possivelmente restaura estado da activity, i.e., expressão e resultado.
         text_calc.setText(savedInstanceState?.getString(EXPRESSION_STATE, ""))
         text_info.text = savedInstanceState?.getString(RESULT_STATE, "")
 
@@ -24,14 +24,15 @@ class MainActivity : AppCompatActivity() {
         createExpressionButtonsListeners()
     }
 
+    // Quando activity para, salva a expressão e o resultado atuais.
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putString(EXPRESSION_STATE, text_calc.text.toString())
         outState.putString(RESULT_STATE, text_info.text.toString())
         super.onSaveInstanceState(outState)
     }
 
-    // Avalia a expressão. Se expressão válida, mostra a resposta no campo text_info.
-    // Caso contrário, mostra uma Toast com a exceção.
+    // Se botão '=' é clicado, avalia a expressão. Se expressão válida, mostra a resposta no campo
+    // text_info. Caso contrário, mostra uma Toast com a exceção.
     fun createEqualButtonListener() {
         btn_Equal.setOnClickListener {
             try {
@@ -44,6 +45,7 @@ class MainActivity : AppCompatActivity() {
                     Toast.LENGTH_LONG
                 ).show()
             }
+
             // Reseta campo de expressão, após ser calculada (ou inválida).
             resetExpression()
         }
@@ -54,8 +56,8 @@ class MainActivity : AppCompatActivity() {
         btn_Clear.setOnClickListener { resetExpression() }
     }
 
-    // Cria um listener pros botões que constroem uma expressão. Adiciona o
-    // respectivo caracter ao campo da expressão.
+    // Se botões que constroem uma expressão são clicados, adiciona o respectivo caracter ao campo
+    // da expressão.
     fun createExpressionButtonsListeners() {
         arrayOf(
             btn_0, btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9, btn_Add,
@@ -68,6 +70,7 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
+    // Limpa campo da expressão.
     fun resetExpression() {
         text_calc.text.clear()
     }
