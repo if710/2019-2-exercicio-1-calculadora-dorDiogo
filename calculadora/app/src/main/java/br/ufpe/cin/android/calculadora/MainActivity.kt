@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         outState.putString(RESULT_STATE, text_info.text.toString())
         super.onSaveInstanceState(outState)
     }
+
     // Avalia a expressão. Se expressão válida, mostra a resposta no campo text_info.
     // Caso contrário, mostra uma Toast com a exceção.
     fun createEqualButtonListener() {
@@ -70,7 +71,6 @@ class MainActivity : AppCompatActivity() {
     fun resetExpression() {
         text_calc.text.clear()
     }
-
 
     //Como usar a função:
     // eval("2+2") == 4.0
