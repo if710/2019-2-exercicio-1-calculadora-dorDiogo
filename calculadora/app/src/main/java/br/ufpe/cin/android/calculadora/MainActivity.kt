@@ -5,25 +5,37 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
+const val EXPRESSION_STATE = "expression_state"
+const val RESULT_STATE = "result_state"
+
 class MainActivity : AppCompatActivity() {
-    var expression: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+        text_calc.setText(savedInstanceState?.getString(EXPRESSION_STATE, ""))
+        text_info.text = savedInstanceState?.getString(RESULT_STATE, "")
+
+        // Cria listeners dos botões.
         createEqualButtonListener()
         createClearButtonListener()
-        createButtonsListeners()
+        createExpressionButtonsListeners()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString(EXPRESSION_STATE, text_calc.text.toString())
+        outState.putString(RESULT_STATE, text_info.text.toString())
+        super.onSaveInstanceState(outState)
+    }
     // Avalia a expressão. Se expressão válida, mostra a resposta no campo text_info.
+    // Caso contrário, mostra uma Toast com a exceção.
     fun createEqualButtonListener() {
         btn_Equal.setOnClickListener {
             try {
-                val answer = eval(expression)
+                val answer = eval(text_calc.text.toString())
                 text_info.text = answer.toString()
-                resetExpression()
             } catch (e: RuntimeException) {
                 Toast.makeText(
                     this,
@@ -31,32 +43,32 @@ class MainActivity : AppCompatActivity() {
                     Toast.LENGTH_LONG
                 ).show()
             }
+            // Reseta campo de expressão, após ser calculada (ou inválida).
             resetExpression()
         }
     }
 
+    // Reseta campo de expressão, se o botão 'C' é clicado.
     fun createClearButtonListener() {
         btn_Clear.setOnClickListener { resetExpression() }
     }
 
-    // Pra cada botão, cria um listener que vai adicionar o respectivo caracter à expressão e atualizar o visor da
-    // expressão. Exceto para o botão '=' e 'C'.
-    fun createButtonsListeners() {
+    // Cria um listener pros botões que constroem uma expressão. Vai adicionar o
+    // respectivo caracter ao campo da expressão.
+    fun createExpressionButtonsListeners() {
         arrayOf(
-            btn_0, btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9, btn_Add, btn_Divide, btn_Dot,
-            btn_LParen, btn_Multiply, btn_Power, btn_RParen, btn_Subtract
+            btn_0, btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9, btn_Add,
+            btn_Divide, btn_Dot, btn_LParen, btn_Multiply, btn_Power, btn_RParen, btn_Subtract
         )
             .map { buttonListener ->
                 buttonListener.setOnClickListener {
-                    expression += buttonListener.text
-                    text_calc.setText(expression)
+                    text_calc.text.append(buttonListener.text)
                 }
             }
     }
 
     fun resetExpression() {
-        expression = ""
-        text_calc.setText(expression)
+        text_calc.text.clear()
     }
 
 
